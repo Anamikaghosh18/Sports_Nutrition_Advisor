@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sports Nutrition Advisor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <i class="fas fa-nutritionist"></i>
+                <span>NutriCoach</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="active">Home</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#about">About</a>    
+            
+    </nav>
+    
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Improve Your food habit With AI</h1>
+            <p>Upload an image of your food and get professional analysis and personalized recommendations</p>
+        </div>
+    </header>
+    
+    <main>
+        <section class="analyzer-section">
+            <div class="container">
+                <div class="card">
+                    <form id="analyzeForm">
+                        <div class="form-group">
+                            <label for="sport">Select Sport:</label>
+                            <div class="select-wrapper">
+                                <select id="sport" name="sport" required>
+                                    <option value="">-- Select Sport type --</option>
+                                    <option value="Basketball">Basketball</option>
+                                    <option value="Soccer">Soccer</option>
+                                    <option value="Tennis">Tennis</option>
+                                    <option value="Golf">Golf</option>
+                                    <option value="Swimming">Swimming</option>
+                                    <option value="Baseball">Baseball</option>
+                                    <option value="Volleyball">Volleyball</option>
+                                    <option value="Running">Running</option>
+                                    <option value="Cycling">Cycling</option>
+                                    <option value="Weightlifting">Weightlifting</option>
+                                    <option value="Yoga">Yoga</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group hidden" id="otherSportGroup">
+                            <label for="otherSport">Specify Sport:</label>
+                            <input type="text" id="otherSport" name="otherSport" placeholder="Enter sport name">
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Upload Image:</label>
+                            <div class="file-upload">
+                                <input type="file" id="image" name="image" accept="image/*" required>
+                                <label for="image" class="file-label">
+                                    <i class="fas fa-cloud-upload-alt"></i> 
+                                    <span id="fileName">Choose file</span>
+                                </label>
+                            </div>
+                            <div class="preview-container hidden">
+                                <img id="imagePreview" src="#" alt="Preview">
+                                <button type="button" id="removeImage" class="remove-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-search"></i> Analyze Technique
+                        </button>
+                    </form>
+                    
+                    <div id="loader" class="loader-container hidden">
+                        <div class="loader"></div>
+                        <p>Analyzing your technique...</p>
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="results" class="card results-card hidden">
+                    <div class="results-header">
+                        <h2>Analysis Results</h2>
+                        <div class="results-actions">
+                            <button id="downloadPdf" class="btn-icon" title="Download as PDF">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                            <button id="shareResults" class="btn-icon" title="Share Results">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                            <button id="saveAnalysis" class="btn-icon" title="Save Analysis">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="results-content">
+                        <div class="results-image">
+                            <img id="resultImage" src="#" alt="Analyzed Image">
+                        </div>
+                        <div id="analysisContent"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="how-it-works" class="how-it-works">
+            <div class="container">
+                <h2 class="section-title">How It Works</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <h3>Upload</h3>
+                        <p>Select your sport and upload a clear image of your food.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>Analyze</h3>
+                        <p>Our AI analyzes your food with advanced computer vision</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <h3>Improve</h3>
+                        <p>Get personalized feedback and actionable recommendations</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+</main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-running"></i>
+                    <span>NutriCoach</span>
+                </div>
+             
+            </div>
+            <div class="copyright">
+                &copy; 2025 NutriCoach. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

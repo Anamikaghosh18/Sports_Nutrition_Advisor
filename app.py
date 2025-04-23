@@ -1,0 +1,100 @@
+import os
+import base64
+import io
+from flask import Flask, request, jsonify, render_template
+from PIL import Image
+import google.generativeai as genai
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+app = Flask(__name__, static_folder='static')
+
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'sports-analyzer-secret-key')
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 
+app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
+
+
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+# Configure Gemini API
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+genai.configure(api_key=GOOGLE_API_KEY)
+
+#  Gemini  model
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+def analyze_sports_image(image_data, sport_name):
+    """
+    Analyze food image using Gemini model and provide recommendations
+    
+    Args:
+        image_data: Binary image data or base64 encoded image string
+        sport_name: Name of the sport for customized analysis
+        
+    Returns:
+        Dictionary containing analysis results or error information
+    """
+    try:
+        
+        if isinstance(image_data, str) and image_data.startswith('data:image'):
+            image_data = image_data.split(',')[1]
+            image = Image.open(io.BytesIO(base64.b64decode(image_data)))
+        else:
+            image = Image.open(io.BytesIO(image_data))
+        
+        # Create prompt for the model based on sport name
+        prompt = f"""
+        Analyze this {sport_name} image and provide:
+        1. A detailed assessment of the nutrients present 
+        2. Key strengths observed
+        3. Areas for improvement
+        4. Specific training recommendations
+        5. Safety considerations if applicable
+        
+        Format the response in clear sections.
+        """
+        
+        # Generate response from Gemini model
+        response = model.generate_content([prompt, image])
+        
+        return {
+            "success": True,
+            "analysis": response.text,
+            "sport": sport_name
+        }
+    
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/analyze', methods=['POST'])
+def analyze():
+    try:
+        if 'image' not in request.files:
+            return jsonify({"success": False, "error": "No image uploaded"})
+        
+        image_file = request.files['image']
+        sport_name = request.form.get('sport', '').strip()
+        
+        if not sport_name:
+            return jsonify({"success": False, "error": "Sport name is required"})
+        
+      
+        image_data = image_file.read()
+        result = analyze_sports_image(image_data, sport_name)
+        
+        return jsonify(result)
+    
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0', port=5000)
