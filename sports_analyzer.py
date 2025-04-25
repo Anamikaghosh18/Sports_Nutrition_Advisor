@@ -4,21 +4,27 @@ import io
 from PIL import Image
 import google.generativeai as genai
 from dotenv import load_dotenv
+from flask import Flask, request, jsonify
+
 load_dotenv()
 
-#Gemini API
+# Configure the Gemini API
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=GOOGLE_API_KEY)
 model = genai.GenerativeModel('gemini-1.5-flash')
+ 
+
+app = Flask(__name__)
+
 
 def analyze_food_image(image_data, sport_name):
     """
     Analyze sports image using Gemini model and provide recommendations
-    
+
     Args:
         image_data: Binary image data or base64 encoded image string
         sport_name: Name of the sport for customized analysis
-        
+
     Returns:
         Dictionary containing analysis results or error information
     """
@@ -31,34 +37,43 @@ def analyze_food_image(image_data, sport_name):
         else:
             # Handle direct binary data
             image = Image.open(io.BytesIO(image_data))
-        
+
         prompt = f"""
-        You are a professional nutritionist. Analyze the provided image of food and provide the following information:
+        You are a professional nutritionist. Analyze the provided image of food and provide the following concise information:
 
-        1.Nutritional Breakdown:
-        - List the key nutrients present in the food (e.g., proteins, carbohydrates, fats, vitamins, minerals).
-        - Provide approximate content in food.
+        1. **Nutritional Breakdown**:
+            - Proteins: Approximate grams
+            - Carbohydrates: Approximate grams
+            - Fats: Approximate grams
+            - Vitamins and Minerals: Key highlights
 
-        2.Health Benefits:
-        - Explain the health benefits of the food based on its nutritional content.
-        
-        3.Food Suggestion:
-        - Recommend additional foods or ingredients to make the meal more balanced.
+        2. **Food Suggestions**:
+            - Recommend 1-2 additional foods or ingredients to make the meal more balanced.
 
-        4.Personalized Recommendations:
-        - Provide tailored advice based on the sport or activity: {sport_name}.
-        
+        3. **Personalized Recommendations**:
+            - Provide 1-2 actionable tips tailored to the sport or activity: {sport_name}.
 
-        Format the response in clear sections with bullet points for easy readability and dont generate long answer keep it short and concise.
-    """
-        response = model.generate_content([prompt, image])
-        
-        return {
-            "success": True,
-            "analysis": response.text,
-            "sport": sport_name
-        }
-    
+        Keep the response concise, structured, and easy to read. Avoid unnecessary details.
+        """
+
+        # Generate response with a token limit
+        response = model.generate_content(
+            [prompt, image],
+            max_output_tokens=150  # Limit the response to 150 tokens
+        )
+        if response and response.text: # added check
+            return {
+                "success": True,
+                "analysis": response.text,
+                "sport": sport_name
+            }
+        else:
+            return {
+                "success": False,
+                "error": "No analysis generated", # added error message
+                "sport": sport_name
+            }
+
     except Exception as e:
         return {
             "success": False,

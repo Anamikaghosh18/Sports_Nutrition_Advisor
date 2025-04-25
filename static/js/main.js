@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Get DOM elements
     const form = document.getElementById('analyzeForm');
     const sportSelect = document.getElementById('sport');
     const otherSportGroup = document.getElementById('otherSportGroup');
@@ -126,4 +125,41 @@ document.addEventListener('DOMContentLoaded', function() {
     function showError(title, message) {
         alert(`${title}: ${message}`);
     }
+
+    document.getElementById('sendChatbotMessage').addEventListener('click', async () => {
+        const inputField = document.getElementById('chatbotInput');
+        const userMessage = inputField.value.trim();
+        if (!userMessage) return;
+
+        // Display user message
+        const messagesContainer = document.getElementById('chatbot-messages');
+        const userMessageElement = document.createElement('div');
+        userMessageElement.className = 'message user';
+        userMessageElement.textContent = userMessage;
+        messagesContainer.appendChild(userMessageElement);
+
+        // Clear input field
+        inputField.value = '';
+
+        // Send message to backend
+        try {
+            const response = await fetch('/chatbot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userMessage })
+            });
+            const data = await response.json();
+
+            // Display chatbot response
+            const botMessageElement = document.createElement('div');
+            botMessageElement.className = 'message bot';
+            botMessageElement.textContent = data.response || 'Sorry, I could not process your request.';
+            messagesContainer.appendChild(botMessageElement);
+
+            // Scroll to the bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
 });

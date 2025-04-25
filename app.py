@@ -1,6 +1,7 @@
 import os
 import base64
 import io
+import logging
 from flask import Flask, request, jsonify, render_template
 from PIL import Image
 import google.generativeai as genai
@@ -8,6 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__, static_folder='static')
 
@@ -76,6 +78,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/analyze', methods=['POST'])
+
 def analyze():
     try:
         if 'image' not in request.files:
@@ -95,6 +98,7 @@ def analyze():
     
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)

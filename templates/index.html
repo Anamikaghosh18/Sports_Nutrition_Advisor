@@ -18,12 +18,13 @@
                 <a href="#" class="active">Home</a>
                 <a href="#how-it-works">How It Works</a>
                 <a href="#about">About</a>    
-            
+            </div>
+        </div>
     </nav>
     
     <header class="hero">
         <div class="hero-content">
-            <h1>Improve Your food habit With AI</h1>
+            <h1>Improve Your Food Habit With AI</h1>
             <p>Upload an image of your food and get professional analysis and personalized recommendations</p>
         </div>
     </header>
@@ -34,30 +35,8 @@
                 <div class="card">
                     <form id="analyzeForm">
                         <div class="form-group">
-                            <label for="sport">Select Sport:</label>
-                            <div class="select-wrapper">
-                                <select id="sport" name="sport" required>
-                                    <option value="">-- Select Sport type --</option>
-                                    <option value="Basketball">Basketball</option>
-                                    <option value="Soccer">Soccer</option>
-                                    <option value="Tennis">Tennis</option>
-                                    <option value="Golf">Golf</option>
-                                    <option value="Swimming">Swimming</option>
-                                    <option value="Baseball">Baseball</option>
-                                    <option value="Volleyball">Volleyball</option>
-                                    <option value="Running">Running</option>
-                                    <option value="Cycling">Cycling</option>
-                                    <option value="Weightlifting">Weightlifting</option>
-                                    <option value="Yoga">Yoga</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                                <i class="fas fa-chevron-down"></i>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group hidden" id="otherSportGroup">
-                            <label for="otherSport">Specify Sport:</label>
-                            <input type="text" id="otherSport" name="otherSport" placeholder="Enter sport name">
+                            <label for="sport">Enter Sport Name:</label>
+                            <input type="text" id="sport" name="sport" placeholder="Enter the sport name" required>
                         </div>
                         <div class="form-group">
                             <label for="image">Upload Image:</label>
@@ -75,15 +54,14 @@
                                 </button>
                             </div>
                         </div>
-                        
                         <button type="submit" class="btn-primary">
-                            <i class="fas fa-search"></i> Analyze Technique
+                            <i class="fas fa-search"></i> Analyze Food
                         </button>
                     </form>
                     
                     <div id="loader" class="loader-container hidden">
                         <div class="loader"></div>
-                        <p>Analyzing your technique...</p>
+                        <p>Analyzing your food...</p>
                         <div class="progress-bar">
                             <div class="progress"></div>
                         </div>
@@ -105,12 +83,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="results-content">
-                        <div class="results-image">
-                            <img id="resultImage" src="#" alt="Analyzed Image">
-                        </div>
-                        <div id="analysisContent"></div>
-                    </div>
+                    <div id="analysisContent"></div>
                 </div>
             </div>
         </section>
@@ -143,16 +116,29 @@
                 </div>
             </div>
         </section>
-</main>
+
+        <section id="about" class="about-us">
+            <div class="container">
+                <h2 class="section-title">About Us</h2>
+                <p>
+                    At NutriCoach, we are passionate about helping individuals achieve their health and fitness goals through personalized nutrition and advanced AI technology. 
+                    Our platform leverages cutting-edge computer vision and machine learning to analyze your food and provide actionable insights tailored to your lifestyle.
+                </p>
+                <p>
+                    Whether you're an athlete looking to optimize your performance or someone striving for a healthier lifestyle, NutriCoach is here to guide you every step of the way.
+                </p>
+                <p>
+                    Join us on this journey to better health and nutrition, powered by innovation and expertise.
+                </p>
+            </div>
+        </section>
+    </main>
     
     <footer>
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <i class="fas fa-running"></i>
-                    <span>NutriCoach</span>
-                </div>
-             
+            <div class="footer-logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>NutriCoach</span>
             </div>
             <div class="copyright">
                 &copy; 2025 NutriCoach. All rights reserved.
