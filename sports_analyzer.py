@@ -59,9 +59,9 @@ def analyze_food_image(image_data, sport_name):
         # Generate response with a token limit
         response = model.generate_content(
             [prompt, image],
-            max_output_tokens=150  # Limit the response to 150 tokens
+            max_output_tokens=150 
         )
-        if response and response.text: # added check
+        if response and response.text: 
             return {
                 "success": True,
                 "analysis": response.text,
@@ -70,7 +70,7 @@ def analyze_food_image(image_data, sport_name):
         else:
             return {
                 "success": False,
-                "error": "No analysis generated", # added error message
+                "error": "No analysis generated", 
                 "sport": sport_name
             }
 

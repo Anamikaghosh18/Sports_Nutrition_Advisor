@@ -20,41 +20,31 @@ app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# Configure Gemini API
+# Gemini API
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=GOOGLE_API_KEY)
 
 #  Gemini  model
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-def analyze_sports_image(image_data, sport_name):
-    """
-    Analyze food image using Gemini model and provide recommendations
-    
-    Args:
-        image_data: Binary image data or base64 encoded image string
-        sport_name: Name of the sport for customized analysis
-        
-    Returns:
-        Dictionary containing analysis results or error information
-    """
+def analyze_food_image(image_data, sport_name):
     try:
-        
         if isinstance(image_data, str) and image_data.startswith('data:image'):
             image_data = image_data.split(',')[1]
             image = Image.open(io.BytesIO(base64.b64decode(image_data)))
         else:
             image = Image.open(io.BytesIO(image_data))
         
-        # Create prompt for the model based on sport name
+        # prompt for the gemini to understand 
         prompt = f"""
-        Analyze this {sport_name} image and provide:
-        1. A detailed assessment of the nutrients present 
-        2. Key strengths observed
-        3. Areas for improvement
-        4. Specific training recommendations
-        5. Safety considerations if applicable
-        
+        Analyze this food image and provide:
+        1. An estimation of the nutrients present in the food item in dictionary format
+          e.g. {'carbohydrates': ,
+                'protein': , 'carbs': ,
+                 'fat': }
+        2. Healthy / Not Healthy 
+        3. Suggest some food items that can be consumed before or after playing {sport_name} in a table format. 
+
         Format the response in clear sections.
         """
         
@@ -64,7 +54,6 @@ def analyze_sports_image(image_data, sport_name):
         return {
             "success": True,
             "analysis": response.text,
-            "sport": sport_name
         }
     
     except Exception as e:
@@ -92,7 +81,7 @@ def analyze():
         
       
         image_data = image_file.read()
-        result = analyze_sports_image(image_data, sport_name)
+        result = analyze_food_image(image_data, sport_name)
         
         return jsonify(result)
     
